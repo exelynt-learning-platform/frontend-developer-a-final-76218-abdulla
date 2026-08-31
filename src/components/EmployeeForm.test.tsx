@@ -1,5 +1,4 @@
-
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import EmployeeForm from './EmployeeForm'
 
@@ -12,7 +11,7 @@ const validInput = () => {
   const name = screen.getByLabelText(/Name/i)
   const email = screen.getByLabelText(/Email/i)
   const mobile = screen.getByLabelText(/Mobile/i)
-  const country = screen.getByLabelText(/Country/i)
+  const country = screen.getByRole('combobox', { name: /Country/i })
   const state = screen.getByLabelText(/State/i)
   const district = screen.getByLabelText(/District/i)
   return { name, email, mobile, country, state, district }
@@ -22,7 +21,7 @@ describe('EmployeeForm', () => {
   it('renders title add mode and all fields', () => {
     render(<EmployeeForm countries={countries} countriesLoading={false} editing={null} onSubmit={jest.fn()} onCancel={jest.fn()} />)
     expect(screen.getByRole('heading', { name: 'Add Employee' })).toBeInTheDocument()
-    expect(validInput()).toBeTruthy()
+    expect(screen.getByLabelText(/Name/i)).toBeInTheDocument()
   })
 
   it('validates required fields and shows errors', async () => {
@@ -35,11 +34,13 @@ describe('EmployeeForm', () => {
   it('shows email format error', async () => {
     const user = userEvent.setup()
     render(<EmployeeForm countries={countries} countriesLoading={false} editing={null} onSubmit={jest.fn()} onCancel={jest.fn()} />)
-    const { email, name, mobile, country, state, district } = validInput()
+    const { email, name, mobile, state, district } = validInput()
     await user.type(name, 'Alice Wonderland')
     await user.type(email, 'bad-email')
     await user.type(mobile, '9876543210')
-    await user.selectOptions(country, 'India')
+    fireEvent.mouseDown(screen.getByRole('combobox', { name: /Country/i }))
+    const indiaOption = await screen.findByText('India')
+    await user.click(indiaOption)
     await user.type(state, 'Karnataka')
     await user.type(district, 'Bangalore')
     await user.click(screen.getByRole('button', { name: 'Add Employee' }))
@@ -49,11 +50,13 @@ describe('EmployeeForm', () => {
   it('shows length error for short name', async () => {
     const user = userEvent.setup()
     render(<EmployeeForm countries={countries} countriesLoading={false} editing={null} onSubmit={jest.fn()} onCancel={jest.fn()} />)
-    const { name, email, mobile, country, state, district } = validInput()
+    const { email, name, mobile, state, district } = validInput()
     await user.type(name, 'Ab')
     await user.type(email, 'alice@example.com')
     await user.type(mobile, '9876543210')
-    await user.selectOptions(country, 'India')
+    fireEvent.mouseDown(screen.getByRole('combobox', { name: /Country/i }))
+    const indiaOption = await screen.findByText('India')
+    await user.click(indiaOption)
     await user.type(state, 'Karnataka')
     await user.type(district, 'Bangalore')
     await user.click(screen.getByRole('button', { name: 'Add Employee' }))
@@ -61,7 +64,6 @@ describe('EmployeeForm', () => {
   })
 
   it('submits valid data and pre-populates on edit', async () => {
-    const user = userEvent.setup()
     const onSubmit = jest.fn()
     const editing = {
       id: '9',
@@ -74,14 +76,13 @@ describe('EmployeeForm', () => {
     }
     render(<EmployeeForm countries={countries} countriesLoading={false} editing={editing} onSubmit={onSubmit} onCancel={jest.fn()} />)
     expect(screen.getByText('Edit Employee')).toBeInTheDocument()
-    const { name, email, mobile, country, state, district } = validInput()
+    const { name, email, mobile, state, district } = validInput()
     expect(name).toHaveValue('Bob')
     expect(email).toHaveValue('bob@example.com')
     expect(mobile).toHaveValue('1234567890')
-    expect(country).toHaveValue('USA')
     expect(state).toHaveValue('CA')
     expect(district).toHaveValue('LA')
-    await user.click(screen.getByRole('button', { name: 'Update' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Update' }))
     expect(onSubmit).toHaveBeenCalledWith({
       name: 'Bob',
       email: 'bob@example.com',

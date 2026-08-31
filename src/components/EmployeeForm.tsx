@@ -1,7 +1,18 @@
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { employeeSchema, type EmployeeFormValues } from '../validation/schema'
 import type { Country, Employee, EmployeeInput } from '../types'
+import {
+  Box,
+  Button,
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from '@mui/material'
 
 interface EmployeeFormProps {
   countries: Country[]
@@ -25,6 +36,7 @@ export default function EmployeeForm({
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
     reset,
   } = useForm<EmployeeFormValues>({
@@ -44,80 +56,122 @@ export default function EmployeeForm({
     if (!editing) reset()
   }
 
-  const fieldError = (name: keyof EmployeeFormValues) =>
-    errors[name] ? <span className="field__error">{errors[name]?.message}</span> : null
-
   const countryInList = countries.some((c) => c.country === editing?.country)
-  const countryOptions = !editing || countryInList ? countries : [...countries, { id: 'editing', country: editing.country }]
+  const countryOptions =
+    !editing || countryInList
+      ? countries
+      : [...countries, { id: 'editing', country: editing.country }]
 
   return (
-    <form className="employee-form" onSubmit={handleSubmit(submit)} noValidate>
-      <h2 className="form-title">
+    <Box component="form" onSubmit={handleSubmit(submit)} noValidate>
+      <Typography variant="h6" gutterBottom fontWeight={700}>
         {editing ? 'Edit Employee' : 'Add Employee'}
-        {editing && <span className="edit-tag">Editing</span>}
-      </h2>
+        {editing && (
+          <span
+            style={{
+              marginLeft: 8,
+              fontSize: '0.75rem',
+              padding: '2px 8px',
+              background: '#e3f2fd',
+              color: '#1976d2',
+              borderRadius: 4,
+            }}
+          >
+            Editing
+          </span>
+        )}
+      </Typography>
 
-      <div className="form-grid">
-        <div className="field">
-          <label htmlFor="name">Name *</label>
-          <input id="name" {...register('name')} placeholder="Full name" />
-          {fieldError('name')}
-        </div>
+      <Box display="grid" gridTemplateColumns={{ xs: '1fr', sm: '1fr 1fr' }} gap={2} my={2}>
+        <TextField
+          label="Name"
+          required
+          fullWidth
+          size="small"
+          {...register('name')}
+          error={!!errors.name}
+          helperText={errors.name?.message}
+        />
 
-        <div className="field">
-          <label htmlFor="email">Email *</label>
-          <input id="email" type="email" {...register('email')} placeholder="name@example.com" />
-          {fieldError('email')}
-        </div>
+        <TextField
+          label="Email"
+          required
+          type="email"
+          fullWidth
+          size="small"
+          {...register('email')}
+          error={!!errors.email}
+          helperText={errors.email?.message}
+        />
 
-        <div className="field">
-          <label htmlFor="mobile">Mobile *</label>
-          <input id="mobile" {...register('mobile')} placeholder="+91 98765 43210" />
-          {fieldError('mobile')}
-        </div>
+        <TextField
+          label="Mobile"
+          required
+          fullWidth
+          size="small"
+          {...register('mobile')}
+          error={!!errors.mobile}
+          helperText={errors.mobile?.message}
+        />
 
-        <div className="field">
-          <label htmlFor="country">Country *</label>
-          <select id="country" {...register('country')} disabled={countriesLoading}>
-            <option value="">{countriesLoading ? 'Loading countries...' : 'Select country'}</option>
-            {countryOptions.map((c) => (
-              <option key={c.id} value={c.country}>
-                {c.country}
-              </option>
-            ))}
-          </select>
-          {fieldError('country')}
-        </div>
+        <FormControl fullWidth size="small" error={!!errors.country}>
+          <InputLabel id="country-label">Country *</InputLabel>
+          <Controller
+            name="country"
+            control={control}
+            render={({ field }) => (
+              <Select labelId="country-label" label="Country *" {...field} disabled={countriesLoading}>
+                <MenuItem value="">
+                  <em>{countriesLoading ? 'Loading countries...' : 'Select country'}</em>
+                </MenuItem>
+                {countryOptions.map((c) => (
+                  <MenuItem key={c.id} value={c.country}>
+                    {c.country}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
+          />
+          <FormHelperText>{errors.country?.message}</FormHelperText>
+        </FormControl>
 
-        <div className="field">
-          <label htmlFor="state">State *</label>
-          <input id="state" {...register('state')} placeholder="State" />
-          {fieldError('state')}
-        </div>
+        <TextField
+          label="State"
+          required
+          fullWidth
+          size="small"
+          {...register('state')}
+          error={!!errors.state}
+          helperText={errors.state?.message}
+        />
 
-        <div className="field">
-          <label htmlFor="district">District *</label>
-          <input id="district" {...register('district')} placeholder="District" />
-          {fieldError('district')}
-        </div>
-      </div>
+        <TextField
+          label="District"
+          required
+          fullWidth
+          size="small"
+          {...register('district')}
+          error={!!errors.district}
+          helperText={errors.district?.message}
+        />
+      </Box>
 
       {error && (
-        <p className="form-error" role="alert">
+        <Typography color="error" variant="body2" sx={{ my: 1 }} role="alert">
           {error}
-        </p>
+        </Typography>
       )}
 
-      <div className="form-actions">
-        <button type="submit" className="btn btn--primary" disabled={busy}>
+      <Box display="flex" gap={1.5} mt={2}>
+        <Button type="submit" variant="contained" disabled={busy} fullWidth>
           {busy ? (editing ? 'Saving...' : 'Adding...') : editing ? 'Update' : 'Add Employee'}
-        </button>
+        </Button>
         {editing && (
-          <button type="button" className="btn btn--ghost" onClick={onCancel} disabled={busy}>
+          <Button type="button" variant="outlined" onClick={onCancel} disabled={busy} fullWidth>
             Cancel
-          </button>
+          </Button>
         )}
-      </div>
-    </form>
+      </Box>
+    </Box>
   )
 }

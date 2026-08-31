@@ -1,3 +1,5 @@
+import { Alert, AlertTitle, Box } from '@mui/material'
+
 interface MessageProps {
   type: 'error' | 'empty' | 'success' | 'info'
   title: string
@@ -5,10 +7,13 @@ interface MessageProps {
 }
 
 export default function Message({ type, title, children }: MessageProps) {
+  const severity = type === 'error' ? 'error' : type === 'success' ? 'success' : 'info'
   return (
-    <div className={`message message--${type}`} role={type === 'error' ? 'alert' : 'status'}>
-      <p className="message__title">{title}</p>
-      {children && <div className="message__body">{children}</div>}
-    </div>
+    <Box my={1} role={type === 'error' ? 'alert' : 'status'}>
+      <Alert severity={severity} variant="outlined">
+        <AlertTitle>{title}</AlertTitle>
+        {children}
+      </Alert>
+    </Box>
   )
 }

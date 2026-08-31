@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Box, Button, TextField } from '@mui/material'
 
 interface SearchBarProps {
   onSearch: (id: string) => void
@@ -15,22 +16,30 @@ export default function SearchBar({ onSearch, onClear, disabled }: SearchBarProp
   }
 
   return (
-    <form className="search-bar" onSubmit={submit} role="search">
-      <input
-        type="text"
-        inputMode="numeric"
+    <Box
+      component="form"
+      onSubmit={submit}
+      display="flex"
+      gap={1.5}
+      flexWrap="wrap"
+      role="search"
+      alignItems="center"
+    >
+      <TextField
+        size="small"
+        label="Search by employee ID"
+        variant="outlined"
         value={id}
         onChange={(e) => setId(e.target.value)}
-        placeholder="Search by employee ID"
-        aria-label="Search by employee ID"
         disabled={disabled}
+        inputProps={{ 'aria-label': 'Search by employee ID' }}
       />
-      <button type="submit" className="btn btn--primary" disabled={disabled || !id.trim()}>
+      <Button type="submit" variant="contained" disabled={disabled || !id.trim()} size="medium">
         Search
-      </button>
-      <button type="button" className="btn btn--ghost" onClick={onClear} disabled={disabled}>
+      </Button>
+      <Button type="button" variant="outlined" onClick={onClear} disabled={disabled} size="medium">
         Clear
-      </button>
-    </form>
+      </Button>
+    </Box>
   )
 }

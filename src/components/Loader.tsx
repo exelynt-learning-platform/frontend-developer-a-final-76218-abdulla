@@ -1,8 +1,12 @@
+import { Box, CircularProgress, Typography } from '@mui/material'
+
 export default function Loader({ label = 'Loading...' }: { label?: string }) {
   return (
-    <div className="loader" role="status">
-      <div className="loader__spinner" aria-hidden="true" />
-      <span>{label}</span>
-    </div>
+    <Box display="flex" alignItems="center" gap={2} p={2} role="status">
+      <CircularProgress size={24} />
+      <Typography variant="body2" color="text.secondary">
+        {label}
+      </Typography>
+    </Box>
   )
 }
