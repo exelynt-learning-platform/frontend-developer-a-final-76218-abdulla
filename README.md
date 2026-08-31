@@ -53,3 +53,4 @@ src/
 The only smart component is `containers/EmployeesContainer.tsx`, which owns all
 state and business logic and composes the dumb components (`EmployeeTable`,
 `EmployeeForm`, `SearchBar`, `DeleteDialog`, `Loader`, `Message`).
+
