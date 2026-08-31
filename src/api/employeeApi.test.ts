@@ -1,9 +1,9 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+
 import { employeeApi, countryApi, ApiError } from './employeeApi'
 
 const BASE = 'https://669b3f09276e45187d34eb4e.mockapi.io/api/v1'
 
-const mockFetch = vi.fn()
+const mockFetch = jest.fn()
 
 describe('employeeApi', () => {
   beforeEach(() => {

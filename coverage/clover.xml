@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1788216426124" clover="3.2.0">
-  <project timestamp="1788216426124" name="All files">
-    <metrics statements="150" coveredstatements="116" conditionals="112" coveredconditionals="86" methods="66" coveredmethods="49" elements="328" coveredelements="251" complexity="0" loc="150" ncloc="150" packages="7" files="13" classes="13"/>
+<coverage generated="1788217887331" clover="3.2.0">
+  <project timestamp="1788217887332" name="All files">
+    <metrics statements="148" coveredstatements="114" conditionals="112" coveredconditionals="86" methods="66" coveredmethods="49" elements="326" coveredelements="249" complexity="0" loc="148" ncloc="148" packages="6" files="12" classes="12"/>
     <package name="src">
       <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="hooks.ts" path="/run/media/ahb/desk/task/frontend-developer-a-final-76218-abdulla/src/hooks.ts">
@@ -195,14 +195,6 @@
         <line num="141" count="0" type="stmt"/>
         <line num="142" count="0" type="stmt"/>
         <line num="147" count="2" type="stmt"/>
-      </file>
-    </package>
-    <package name="src.test">
-      <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="vitest-to-jest.ts" path="/run/media/ahb/desk/task/frontend-developer-a-final-76218-abdulla/src/test/vitest-to-jest.ts">
-        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="6" type="stmt"/>
-        <line num="3" count="6" type="stmt"/>
       </file>
     </package>
     <package name="src.validation">

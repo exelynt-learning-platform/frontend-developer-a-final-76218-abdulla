@@ -489,17 +489,6 @@ BRF:10
 BRH:5
 end_of_record
 TN:
-SF:src/test/vitest-to-jest.ts
-FNF:0
-FNH:0
-DA:1,6
-DA:3,6
-LF:2
-LH:2
-BRF:0
-BRH:0
-end_of_record
-TN:
 SF:src/validation/schema.ts
 FNF:0
 FNH:0
