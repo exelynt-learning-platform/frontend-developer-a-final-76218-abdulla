@@ -18,7 +18,7 @@ const employee = {
   district: 'BLR',
 }
 
-const mockFetch = jest.fn()
+const mockFetch = vi.fn()
 
 function renderContainer() {
   const store = configureStore({

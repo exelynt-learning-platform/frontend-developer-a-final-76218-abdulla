@@ -19,21 +19,21 @@ const validInput = () => {
 
 describe('EmployeeForm', () => {
   it('renders title add mode and all fields', () => {
-    render(<EmployeeForm countries={countries} countriesLoading={false} editing={null} onSubmit={jest.fn()} onCancel={jest.fn()} />)
+    render(<EmployeeForm countries={countries} countriesLoading={false} editing={null} onSubmit={vi.fn()} onCancel={vi.fn()} />)
     expect(screen.getByRole('heading', { name: 'Add Employee' })).toBeInTheDocument()
     expect(screen.getByLabelText(/Name/i)).toBeInTheDocument()
   })
 
   it('validates required fields and shows errors', async () => {
     const user = userEvent.setup()
-    render(<EmployeeForm countries={countries} countriesLoading={false} editing={null} onSubmit={jest.fn()} onCancel={jest.fn()} />)
+    render(<EmployeeForm countries={countries} countriesLoading={false} editing={null} onSubmit={vi.fn()} onCancel={vi.fn()} />)
     await user.click(screen.getByRole('button', { name: 'Add Employee' }))
     expect(await screen.findAllByText(/required|must be|valid/i)).not.toHaveLength(0)
   })
 
   it('shows email format error', async () => {
     const user = userEvent.setup()
-    render(<EmployeeForm countries={countries} countriesLoading={false} editing={null} onSubmit={jest.fn()} onCancel={jest.fn()} />)
+    render(<EmployeeForm countries={countries} countriesLoading={false} editing={null} onSubmit={vi.fn()} onCancel={vi.fn()} />)
     const { email, name, mobile, state, district } = validInput()
     await user.type(name, 'Alice Wonderland')
     await user.type(email, 'bad-email')
@@ -49,7 +49,7 @@ describe('EmployeeForm', () => {
 
   it('shows length error for short name', async () => {
     const user = userEvent.setup()
-    render(<EmployeeForm countries={countries} countriesLoading={false} editing={null} onSubmit={jest.fn()} onCancel={jest.fn()} />)
+    render(<EmployeeForm countries={countries} countriesLoading={false} editing={null} onSubmit={vi.fn()} onCancel={vi.fn()} />)
     const { email, name, mobile, state, district } = validInput()
     await user.type(name, 'Ab')
     await user.type(email, 'alice@example.com')
@@ -64,7 +64,7 @@ describe('EmployeeForm', () => {
   })
 
   it('submits valid data and pre-populates on edit', async () => {
-    const onSubmit = jest.fn()
+    const onSubmit = vi.fn()
     const editing = {
       id: '9',
       name: 'Bob',
@@ -74,7 +74,7 @@ describe('EmployeeForm', () => {
       state: 'CA',
       district: 'LA',
     }
-    render(<EmployeeForm countries={countries} countriesLoading={false} editing={editing} onSubmit={onSubmit} onCancel={jest.fn()} />)
+    render(<EmployeeForm countries={countries} countriesLoading={false} editing={editing} onSubmit={onSubmit} onCancel={vi.fn()} />)
     expect(screen.getByText('Edit Employee')).toBeInTheDocument()
     const { name, email, mobile, state, district } = validInput()
     expect(name).toHaveValue('Bob')

@@ -20,8 +20,8 @@ const staff = [
 describe('SearchBar', () => {
   it('triggers search with id', async () => {
     const user = userEvent.setup()
-    const onSearch = jest.fn()
-    render(<SearchBar onSearch={onSearch} onClear={jest.fn()} />)
+    const onSearch = vi.fn()
+    render(<SearchBar onSearch={onSearch} onClear={vi.fn()} />)
     await user.type(screen.getByLabelText(/Search by employee ID/i), '42')
     await user.click(screen.getByRole('button', { name: 'Search' }))
     expect(onSearch).toHaveBeenCalledWith('42')
@@ -29,8 +29,8 @@ describe('SearchBar', () => {
 
   it('clears via clear button', async () => {
     const user = userEvent.setup()
-    const onClear = jest.fn()
-    render(<SearchBar onSearch={jest.fn()} onClear={onClear} />)
+    const onClear = vi.fn()
+    render(<SearchBar onSearch={vi.fn()} onClear={onClear} />)
     await user.click(screen.getByRole('button', { name: 'Clear' }))
     expect(onClear).toHaveBeenCalled()
   })
@@ -38,7 +38,7 @@ describe('SearchBar', () => {
 
 describe('EmployeeTable', () => {
   it('renders employee columns', () => {
-    render(<EmployeeTable employees={staff} onEdit={jest.fn()} onDelete={jest.fn()} />)
+    render(<EmployeeTable employees={staff} onEdit={vi.fn()} onDelete={vi.fn()} />)
     expect(screen.getByText('Alice')).toBeInTheDocument()
     expect(screen.getByText('alice@example.com')).toBeInTheDocument()
     expect(screen.getByText('1111111111')).toBeInTheDocument()
@@ -47,8 +47,8 @@ describe('EmployeeTable', () => {
 
   it('calls onEdit and onDelete', async () => {
     const user = userEvent.setup()
-    const onEdit = jest.fn()
-    const onDelete = jest.fn()
+    const onEdit = vi.fn()
+    const onDelete = vi.fn()
     render(<EmployeeTable employees={staff} onEdit={onEdit} onDelete={onDelete} />)
     await user.click(screen.getByRole('button', { name: 'Edit Alice' }))
     await user.click(screen.getByRole('button', { name: 'Delete Alice' }))
@@ -60,8 +60,8 @@ describe('EmployeeTable', () => {
 describe('DeleteDialog', () => {
   it('shows employee name and confirms delete', async () => {
     const user = userEvent.setup()
-    const onConfirm = jest.fn()
-    const onCancel = jest.fn()
+    const onConfirm = vi.fn()
+    const onCancel = vi.fn()
     render(<DeleteDialog employee={staff[0]} onConfirm={onConfirm} onCancel={onCancel} />)
     expect(screen.getByText(/Delete employee\?/i)).toBeInTheDocument()
     expect(screen.getByText(/Alice/i)).toBeInTheDocument()
